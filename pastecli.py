@@ -1,10 +1,13 @@
 import json
 import requests
 import sys
+import configparser
 
-# set the paste service api url
-url = 'http://paste.0x06.org/'
-api = 'http://paste.0x06.org/api/json/create'
+# read config file
+config = configparser.ConfigParser()
+config.read('pastecli.conf')
+url = config['SERVICE']['url']
+api = config['SERVICE']['api']
 
 # read stuff from stdin
 data = sys.stdin.read()
