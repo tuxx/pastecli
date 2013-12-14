@@ -8,12 +8,13 @@ config = configparser.ConfigParser()
 config.read('pastecli.conf')
 url = config['SERVICE']['url']
 api = config['SERVICE']['api']
+lang = config['OPTIONS']['lang']
 
 # read stuff from stdin
 data = sys.stdin.read()
 
 # build the payload
-payload = {'data':data,'language':'text'}
+payload = {'data':data,'language':lang}
 
 # some headers
 headers = {'content-type': 'application/json'}
