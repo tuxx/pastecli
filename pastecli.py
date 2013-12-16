@@ -7,7 +7,7 @@ import configparser
 config = configparser.ConfigParser()
 config.read('pastecli.conf')
 url = config['SERVICE']['url']
-api = config['SERVICE']['api']
+api = 'api/json/'
 lang = config['OPTIONS']['lang']
 expire = config['OPTIONS']['expire']
 
@@ -21,7 +21,7 @@ payload = {'data':data,'language':lang,'expire':expire}
 headers = {'content-type': 'application/json'}
 
 # send the data to paste service
-r = requests.post(api, data=json.dumps(payload), headers=headers)
+r = requests.post(url + api + 'create', data=json.dumps(payload), headers=headers)
 
 # parse the json answer
 res = json.loads(r.text)
