@@ -2,29 +2,47 @@ import json
 import requests
 import sys
 import configparser
+from os.path import expanduser
 
-# read config file
-config = configparser.ConfigParser()
-config.read('pastecli.conf')
-url = config['SERVICE']['url']
-api = 'api/json/'
-lang = config['OPTIONS']['lang']
-expire = config['OPTIONS']['expire']
+def get_config():
+    user_conf = expanduser("~") + '/.pastecli.conf'
+    global_conf = '/etc/pastecli.conf'
+    list = []
+    try:
+        with open(user_conf):
+            return user_conf
+    except IOError:
+        pass
+    try:
+        with open(global_conf):
+            return global_conf
+    except IOError:
+        print('There must be a global or local config file')
+        sys.exit()
 
-# read stuff from stdin
-data = sys.stdin.read()
+if __name__ == "__main__":
+    # read config file
+    config = configparser.ConfigParser()
+    config.read(get_config())
+    url = config['SERVICE']['url']
+    api = 'api/json/'
+    lang = config['OPTIONS']['lang']
+    expire = config['OPTIONS']['expire']
 
-# build the payload
-payload = {'data':data,'language':lang,'expire':expire}
+    # read stuff from stdin
+    data = sys.stdin.read()
 
-# some headers
-headers = {'content-type': 'application/json'}
+    # build the payload
+    payload = {'data':data,'language':lang,'expire':expire}
 
-# send the data to paste service
-r = requests.post(url + api + 'create', data=json.dumps(payload), headers=headers)
+    # some headers
+    headers = {'content-type': 'application/json'}
 
-# parse the json answer
-res = json.loads(r.text)
+    # send the data to paste service
+    r = requests.post(url + api + 'create', data=json.dumps(payload), headers=headers)
 
-# print the paste url
-print(url + res['result']['id'])
+    # parse the json answer
+    res = json.loads(r.text)
+
+    # print the paste url
+    print(url + res['result']['id'])
