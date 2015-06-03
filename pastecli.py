@@ -83,7 +83,10 @@ if __name__ == "__main__":
     res = json.loads(r.text)
 
     # print the paste url
-    if res['result']['hash'] is not None:
-        print(args.url + res['result']['id'] + '/' + res['result']['hash'])
-    else:
-        print(args.url + res['result']['id'])
+    try:
+		if res['result']['hash'] is not None:
+			print(args.url + res['result']['id'] + '/' + res['result']['hash'])
+		else:
+			print(args.url + res['result']['id'])
+    except KeyError:
+        print res['result']['error']
