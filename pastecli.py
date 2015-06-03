@@ -23,6 +23,7 @@ def get_config():
         sys.exit()
 
 if __name__ == "__main__":
+
     # read config file
     config = configparser.ConfigParser()
     config.read(get_config())
@@ -35,6 +36,11 @@ if __name__ == "__main__":
     parser.add_argument('-e','--expire',help='set the expire time of the paste in seconds',dest='expire', default=config['OPTIONS']['expire'])
     parser.add_argument('-u','--url',help='set the url of the paste service',dest='url', default=config['SERVICE']['url'] )
     args = parser.parse_args()
+
+    # This means stdin is empty. So we exit and print usage.
+    if sys.stdin.isatty():
+        parser.print_help()
+        sys.exit()
 
     api = 'api/json/'
 
